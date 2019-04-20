@@ -2,55 +2,60 @@ package com.brandonlamb.kuadtree
 
 import org.junit.Test
 import java.lang.System.currentTimeMillis
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.system.measureTimeMillis
 
 class TreePerfTest {
   @Test
   fun `Should insert elements`() {
+//    val maxTest = 1_000_000
+    val maxTest = 100
+    val maxActors = 1_000
+    val min = 0.01
+    val max = 9_999.99
+
+    Tree.MAX_ITEM_BY_NODE = 5
+    Tree.MAX_LEVEL = 5
+
+    val actors = mutableListOf<Actor>()
+    for (n in 0 until maxActors) {
+      val actor = Actor(n, Vector2(generate(min, max), generate(min, max)))
+      actors.add(actor)
+//      println("Actor: ${actor.position.x}, ${actor.position.y}")
+    }
+
     val startTime = currentTimeMillis()
-    val maxTest = 1000000
 
     for (i in 0 until maxTest) {
-      Tree.MAX_ITEM_BY_NODE = 1
-      Tree.MAX_LEVEL = 2
+      val runtime = measureTimeMillis {
+        val tree = Tree<Actor>(Rectangle(0f, 0f, 10_000f, 10_000f), 0)
 
-      val tree = Tree<Rectangle>(Rectangle(0f, 0f, 10f, 10f), 0)
+        val x1 = measureTimeMillis {
+          actors.forEach { actor -> tree.insert(Rectangle(actor.position.x, actor.position.y, 1f, 1f), actor) }
+        }
+//        println("tree.insert: ${x1}ms")
 
-      val r1 = Rectangle(1f, 1f, 1f, 1f)
-      val r2 = Rectangle(2f, 2f, 1f, 1f)
-      val r3 = Rectangle(4f, 4f, 1f, 1f)
-      val r4 = Rectangle(6f, 6f, 1f, 1f)
-      val r5 = Rectangle(4f, 4f, 2f, 2f)
-      val r6 = Rectangle(0.5f, 6.5f, 0.5f, 0.5f)
+        val list = mutableListOf<Actor>()
+        val x2 = measureTimeMillis {
+          tree.getElements(list, Rectangle(2f, 2f, 1f, 1f))
 
-      tree.insert(r1, r1)
-      tree.insert(r2, r2)
-      tree.insert(r3, r3)
-      tree.insert(r4, r4)
-      tree.insert(r5, r5)
-      tree.insert(r6, r6)
+          list.clear()
+          tree.getElements(list, Rectangle(4f, 2f, 1f, 1f))
+        }
+//        println("tree.getElements: ${x2}ms")
 
-      val list = mutableListOf<Rectangle>()
-      tree.getElements(list, Rectangle(2f, 2f, 1f, 1f))
-
-      val expected = mutableListOf<Rectangle>()
-      expected.add(r1)
-      expected.add(r5)
-      expected.add(r2)
-      expected.add(r3)
-
-      list.clear()
-      tree.getElements(list, Rectangle(4f, 2f, 1f, 1f))
-
-      expected.clear()
-      expected.add(r1)
-      expected.add(r5)
-      expected.add(r2)
-      expected.add(r3)
-
-      val zoneList = mutableListOf<Rectangle>()
-      tree.getAllZones(zoneList)
+//      val zoneList = mutableListOf<Rectangle>()
+//      val x3 = measureNanoTime { tree.getAllZones(zoneList) }
+//      println("tree.getAllZones: ${x3}ms")
+      }
+      println("Iteration: ${runtime}ms")
     }
 
     println("Total execution time for $maxTest iterations: ${currentTimeMillis() - startTime}ms")
+  }
+
+  private fun generate(min: Double, max: Double): Float {
+    val x = ThreadLocalRandom.current().nextDouble(min, max).toFloat()
+    return "%.2f".format(x).toFloat()
   }
 }

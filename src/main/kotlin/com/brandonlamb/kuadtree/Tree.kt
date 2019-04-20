@@ -18,7 +18,7 @@ class Tree<T>(private val zone: Rectangle, private val level: Int) {
 
     regions[region].insert(r, element)
 
-    if (nodes.size >= MAX_ITEM_BY_NODE && this.level < MAX_LEVEL) {
+    if (nodes.size >= MAX_ITEM_BY_NODE && level < MAX_LEVEL) {
       // redispatch the elements
       val tempNodes = mutableListOf<Node<T>>()
       val length = nodes.size
@@ -69,7 +69,7 @@ class Tree<T>(private val zone: Rectangle, private val level: Int) {
   }
 
   fun getAllZones(list: MutableList<Rectangle>) {
-    list.add(this.zone)
+    list.add(zone)
     if (regions.isNotEmpty()) {
       regions[REGION_NW].getAllZones(list)
       regions[REGION_NE].getAllZones(list)
