@@ -1,7 +1,5 @@
 package com.brandonlamb.kuadtree
 
-import java.util.ArrayList
-
 class Tree<T>(private val zone: Rectangle, private val level: Int) {
   private val nodes = mutableListOf<Node<T>>()
   private var regions: Array<Tree<T>> = emptyArray()
@@ -22,7 +20,7 @@ class Tree<T>(private val zone: Rectangle, private val level: Int) {
 
     if (nodes.size >= MAX_ITEM_BY_NODE && this.level < MAX_LEVEL) {
       // redispatch the elements
-      val tempNodes = ArrayList<Node<T>>()
+      val tempNodes = mutableListOf<Node<T>>()
       val length = nodes.size
 
       for (i in 0 until length) {
@@ -35,7 +33,7 @@ class Tree<T>(private val zone: Rectangle, private val level: Int) {
     }
   }
 
-  fun getElements(list: ArrayList<T>, r: Rectangle): ArrayList<T> {
+  fun getElements(list: MutableList<T>, r: Rectangle): MutableList<T> {
     val region = findRegion(r, false)
 
     val length = nodes.size
@@ -52,7 +50,7 @@ class Tree<T>(private val zone: Rectangle, private val level: Int) {
     return list
   }
 
-  fun getAllElements(list: ArrayList<T>, firstCall: Boolean): ArrayList<T> {
+  fun getAllElements(list: MutableList<T>, firstCall: Boolean): MutableList<T> {
     if (regions.isNotEmpty()) {
       regions[REGION_NW].getAllElements(list, false)
       regions[REGION_NE].getAllElements(list, false)
@@ -70,7 +68,7 @@ class Tree<T>(private val zone: Rectangle, private val level: Int) {
     return list
   }
 
-  fun getAllZones(list: ArrayList<Rectangle>) {
+  fun getAllZones(list: MutableList<Rectangle>) {
     list.add(this.zone)
     if (regions.isNotEmpty()) {
       regions[REGION_NW].getAllZones(list)

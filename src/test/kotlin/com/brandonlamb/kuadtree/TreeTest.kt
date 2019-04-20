@@ -3,7 +3,6 @@ package com.brandonlamb.kuadtree
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.ArrayList
 
 class TreeTest {
   @Test
@@ -27,10 +26,10 @@ class TreeTest {
     tree.insert(r5, r5)
     tree.insert(r6, r6)
 
-    val list = ArrayList<Rectangle>()
+    val list = mutableListOf<Rectangle>()
     tree.getElements(list, Rectangle(2f, 2f, 1f, 1f))
 
-    val expected = ArrayList<Rectangle>()
+    val expected = mutableListOf<Rectangle>()
     expected.add(r1)
     expected.add(r5)
     expected.add(r2)
@@ -47,7 +46,7 @@ class TreeTest {
     expected.add(r2)
     expected.add(r3)
 
-    val zoneList = ArrayList<Rectangle>()
+    val zoneList = mutableListOf<Rectangle>()
     tree.getAllZones(zoneList)
 
     assertEquals(zoneList.size.toLong(), 9)
@@ -66,15 +65,15 @@ class TreeTest {
     tree.insert(r1, r1)
     tree.insert(r2, r2)
 
-    var list = ArrayList<Rectangle>()
+    var list = mutableListOf<Rectangle>()
 //    tree.getElements(list, Rectangle(2f, 2f, 1f, 1f))
     tree.getElements(list, r2)
 
     assertTrue(list.size == 2)
 
-    val r3 = Rectangle(11f, 11f, 1f, 1f)
+//    val r3 = Rectangle(11f, 11f, 1f, 1f)
 
-    list = ArrayList()
+    list = mutableListOf()
     tree.getElements(list, r2)
   }
 }

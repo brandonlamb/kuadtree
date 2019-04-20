@@ -2,7 +2,6 @@ package com.brandonlamb.kuadtree
 
 import org.junit.Test
 import java.lang.System.currentTimeMillis
-import java.util.ArrayList
 
 class TreePerfTest {
   @Test
@@ -30,10 +29,10 @@ class TreePerfTest {
       tree.insert(r5, r5)
       tree.insert(r6, r6)
 
-      val list = ArrayList<Rectangle>()
+      val list = mutableListOf<Rectangle>()
       tree.getElements(list, Rectangle(2f, 2f, 1f, 1f))
 
-      val expected = ArrayList<Rectangle>()
+      val expected = mutableListOf<Rectangle>()
       expected.add(r1)
       expected.add(r5)
       expected.add(r2)
@@ -48,7 +47,7 @@ class TreePerfTest {
       expected.add(r2)
       expected.add(r3)
 
-      val zoneList = ArrayList<Rectangle>()
+      val zoneList = mutableListOf<Rectangle>()
       tree.getAllZones(zoneList)
     }
 
